@@ -25,6 +25,8 @@ namespace ConsoleTemplate
          }
 
 
+         
+
          var builder = new HostBuilder()
              .ConfigureLogging(logging =>
              {
@@ -36,10 +38,16 @@ namespace ConsoleTemplate
              {
                 services.AddSingleton<StartArgs>(new StartArgs(args));
                 services.AddHostedService<Worker>();
-                services.AddSingleton<ConsoleFormatter, CustomConsoleFormatter>();
+
+                //If you want to use a custom color dictionary, you can create the dictionary and then pass it into the CustomConsoleFormatter constructor
+                //This can be useful if you want colors associated with object types for instance..
+                Dictionary<string, ConsoleColor> custom = new() { { "CustomKey", ConsoleColor.DarkBlue }, { "Key2", ConsoleColor.DarkMagenta } };
+                services.AddSingleton<ConsoleFormatter, CustomConsoleFormatter>(sp => new CustomConsoleFormatter(custom));
+
+                //Otherwise, just use the default colors
+                //services.AddSingleton<ConsoleFormatter, CustomConsoleFormatter>();
                 services.AddLogging(builder =>
                 {
-                   builder.AddConsoleFormatter<CustomConsoleFormatter, ConsoleFormatterOptions>();
                    builder.AddConsole(options =>
                    {
                       options.FormatterName = "custom";
@@ -51,7 +59,7 @@ namespace ConsoleTemplate
              })
              .ConfigureAppConfiguration((hostContext, appConfiguration) =>
              {
-                appConfiguration.SetBasePath(System.IO.Path.GetDirectoryName(System.AppContext.BaseDirectory));
+                appConfiguration.SetBasePath(System.IO.Path.GetDirectoryName(AppContext.BaseDirectory) ?? string.Empty);
                 appConfiguration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
                 appConfiguration.AddJsonFile("local.settings.json", optional: false, reloadOnChange: true);
                 appConfiguration.AddEnvironmentVariables();
