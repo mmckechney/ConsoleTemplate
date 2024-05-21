@@ -8,7 +8,7 @@ namespace ConsoleTemplate
 
    public sealed class CustomConsoleFormatter : ConsoleFormatter
    {
-      
+
       private Dictionary<string, ConsoleColor> customColors = null;
       private ConsoleColor defaultColor;
       public CustomConsoleFormatter() : base("custom")
@@ -75,7 +75,7 @@ namespace ConsoleTemplate
          if (message.Contains("**COLOR:"))
          {
             var colorString = message.Split("**COLOR:")[1];
-            if(customColors != null && customColors.ContainsKey(colorString))
+            if (customColors != null && customColors.ContainsKey(colorString))
             {
                return (customColors[colorString], message.Split("**COLOR:")[0]);
             }
@@ -95,19 +95,21 @@ namespace ConsoleTemplate
    public static partial class ILoggerExtensions
    {
       /// <summary>
-      /// Do define the color of the message, wrap the colored words in double curly braces, ending with a colon (:) and color name.
-      /// For example log.LogInformation("this is my {{blue message:blue}} and this is my {{red message:red}}");
+      /// Do define the color of the message, wrap the colored words in curly braces, ending with a pipe (|) and color name or key name of your custom color dictionary.
+      /// For example log.LogInformation("this is my {blue message|blue} and this is my {red message|red}");
+      /// For string interpolation, escape with double curly braces, for example log.LogInformation($"this is my {{{obj.value}|blue}} and this is my {{{obj2.value}|red}}");
       /// </summary>
       /// <param name="logger"></param>
       /// <param name="message"></param>
       public static void LogInformation(this ILogger logger, string message)
       {
-         logger.Log(LogLevel.Information,FormatMessages(message));
+         logger.Log(LogLevel.Information, FormatMessages(message));
       }
 
       /// <summary>
-      /// Do define the color of the message, wrap the colored words in double curly braces, ending with a colon (:) and color name.
-      /// For example log.LogDebug("this is my {{blue message:blue}} and this is my {{red message:red}}");
+      /// Do define the color of the message, wrap the colored words in curly braces, ending with a pipe (|) and color name or key name of your custom color dictionary.
+      /// For example log.LogDebug("this is my {blue message|blue} and this is my {red message|red}");
+      /// For string interpolation, escape with double curly braces, for example log.LogDebug($"this is my {{{obj.value}|blue}} and this is my {{{obj2.value}|red}}");
       /// </summary>
       /// <param name="logger"></param>
       /// <param name="message"></param>
@@ -117,8 +119,9 @@ namespace ConsoleTemplate
       }
 
       /// <summary>
-      /// Do define the color of the message, wrap the colored words in double curly braces, ending with a colon (:) and color name.
-      /// For example log.LogError("this is my {{blue message:blue}} and this is my {{red message:red}}");
+      /// Do define the color of the message, wrap the colored words in curly braces, ending with a pipe (|) and color name or key name of your custom color dictionary.
+      /// For example log.LogError("this is my {blue message|blue} and this is my {red message|red}");
+      /// For string interpolation, escape with double curly braces, for example log.LogError($"this is my {{{obj.value}|blue}} and this is my {{{obj2.value}|red}}");
       /// </summary>
       /// <param name="logger"></param>
       /// <param name="message"></param>
@@ -128,8 +131,9 @@ namespace ConsoleTemplate
       }
 
       /// <summary>
-      /// Do define the color of the message, wrap the colored words in double curly braces, ending with a colon (:) and color name.
-      /// For example log.Warning("this is my {{blue message:blue}} and this is my {{red message:red}}");
+      /// Do define the color of the message, wrap the colored words in curly braces, ending with a pipe (|) and color name or key name of your custom color dictionary.
+      /// For example log.LogWarning("this is my {blue message|blue} and this is my {red message|red}");
+      /// For string interpolation, escape with double curly braces, for example log.LogWarning($"this is my {{{obj.value}|blue}} and this is my {{{obj2.value}|red}}");
       /// </summary>
       /// <param name="logger"></param>
       /// <param name="message"></param>
@@ -139,8 +143,9 @@ namespace ConsoleTemplate
       }
 
       /// <summary>
-      /// Do define the color of the message, wrap the colored words in double curly braces, ending with a colon (:) and color name.
-      /// For example log.LogCritical("this is my {{blue message:blue}} and this is my {{red message:red}}");
+      /// Do define the color of the message, wrap the colored words in curly braces, ending with a pipe (|) and color name or key name of your custom color dictionary.
+      /// For example log.LogCritical("this is my {blue message|blue} and this is my {red message|red}");
+      /// For string interpolation, escape with double curly braces, for example log.LogCritical($"this is my {{{obj.value}|blue}} and this is my {{{obj2.value}|red}}");
       /// </summary>
       /// <param name="logger"></param>
       /// <param name="message"></param>
@@ -150,8 +155,9 @@ namespace ConsoleTemplate
       }
 
       /// <summary>
-      /// Do define the color of the message, wrap the colored words in double curly braces, ending with a colon (:) and color name.
-      /// For example log.LogTrace("this is my {{blue message:blue}} and this is my {{red message:red}}");
+      /// Do define the color of the message, wrap the colored words in curly braces, ending with a pipe (|) and color name or key name of your custom color dictionary.
+      /// For example log.LogTrace("this is my {blue message|blue} and this is my {red message|red}");
+      /// For string interpolation, escape with double curly braces, for example log.LogTrace($"this is my {{{obj.value}|blue}} and this is my {{{obj2.value}|red}}");
       /// </summary>
       /// <param name="logger"></param>
       /// <param name="message"></param>
@@ -161,9 +167,10 @@ namespace ConsoleTemplate
       }
 
 
-      private static Regex curlyBraceRegex = new Regex(@"\{(.+?):(.+?)\}");
+      private static Regex curlyBraceRegex = new Regex(@"\{(.+?)\|(.+?)\}");
+
       private static string FormatMessages(string message)
-      { 
+      {
          ConsoleColor color = ConsoleColor.White;
          string[] substrings = curlyBraceRegex.Split(message);
          List<string> formattedMessages = new List<string>();

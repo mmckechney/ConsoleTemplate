@@ -34,9 +34,9 @@ namespace ConsoleTemplate
          if (args.Length == 0) args = new string[] { "-h" };
          int val = await rootParser.InvokeAsync(args);
 
-         log.LogInformation("This is an {example:red} of a {custom:blue} colored log message");
-         log.LogInformation($"This is an {{example:green}} of a {{custom:cyan}} colored log message when using the '$' string interpolation");
-         log.LogInformation($"This is an {{example:CustomKey}} of a {{custom:Key2}} colored log message when using custom color dictionary");
+         log.LogInformation("This is an {example|red} of a {custom|blue} colored log message");
+         log.LogInformation($"This is an {{example|green}} of a {{custom|cyan}} colored log message when using the '$' string interpolation");
+         log.LogInformation($"This is an {{example|CustomKey}} of a {{custom|Key2}} colored log message when using custom color dictionary");
 
          while (true)
          {
