@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ConsoleTemplate.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.CommandLine.Parsing;
 
 namespace ConsoleTemplate
 {
-   internal class Worker : BackgroundService
+    internal class Worker : BackgroundService
    {
       private static ILogger<Worker> log;
       private static ILoggerFactory logFactory;
@@ -34,9 +35,13 @@ namespace ConsoleTemplate
          if (args.Length == 0) args = new string[] { "-h" };
          int val = await rootParser.InvokeAsync(args);
 
-         log.LogInformation("This is an {example|red} of a {custom|blue} colored log message");
+         log.LogInformation("This is an {example|gray} of a {custom|blue} colored log message with standard color names");
          log.LogInformation($"This is an {{example|green}} of a {{custom|cyan}} colored log message when using the '$' string interpolation");
          log.LogInformation($"This is an {{example|CustomKey}} of a {{custom|Key2}} colored log message when using custom color dictionary");
+         log.LogInformation($"This is an {{example|rgb(221, 105, 217)}} of a {{custom|rgb(28, 240, 75)}} colored log message when using an RGB setting");
+
+
+        CustomConsoleColors.PrintCustomColorMap();
 
          while (true)
          {

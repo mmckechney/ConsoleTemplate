@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ConsoleTemplate.Logging;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging.Console;
 
 namespace ConsoleTemplate
 {
-   internal class Program
+    internal class Program
    {
 
       public static void Main(string[] args)
@@ -41,7 +42,7 @@ namespace ConsoleTemplate
 
                 //If you want to use a custom color dictionary, you can create the dictionary and then pass it into the CustomConsoleFormatter constructor
                 //This can be useful if you want colors associated with object types for instance..
-                Dictionary<string, ConsoleColor> custom = new() { { "CustomKey", ConsoleColor.DarkBlue }, { "Key2", ConsoleColor.DarkMagenta } };
+                Dictionary<string, (int r, int g, int b)> custom = new() { { "CustomKey", (0, 6, 111) }, { "Key2", (139, 6, 134) } };
                 services.AddSingleton<ConsoleFormatter, CustomConsoleFormatter>(sp => new CustomConsoleFormatter(custom));
 
                 //Otherwise, just use the default colors
